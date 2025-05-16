@@ -1,13 +1,13 @@
 <template>
   <v-app>
     <v-main>
-      <CameraView />
+      <RouterView />
     </v-main>
   </v-app>
 </template>
 
 <script setup>
-import CameraView from './components/CameraView.vue'
+// No imports needed here
 </script>
 
 <style>

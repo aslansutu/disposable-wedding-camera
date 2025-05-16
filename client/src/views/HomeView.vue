@@ -1,9 +1,9 @@
-<script setup>
-import TheWelcome from '../components/TheWelcome.vue'
-</script>
-
 <template>
   <main>
-    <TheWelcome />
+    <CameraView />
   </main>
 </template>
+
+<script setup>
+import CameraView from '@/components/CameraView.vue'
+</script>
