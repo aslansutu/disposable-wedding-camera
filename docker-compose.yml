@@ -1,0 +1,27 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-proxy"
+      - "traefik.http.routers.disposable-camera.rule=Host(`${DOMAIN}`) && PathPrefix(`/`) || Host(`disposable-camera.${DOMAIN}`)"
+      - "traefik.http.routers.disposable-camera.entrypoints=websecure,web"
+      - "trafeik.http.routers.disposable-camera.tls=true"
+      - "traefik.http.middlewares.disposable-camera-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.disposable-camera.middlewares=disposable-camera-https-redirect"
+      - "traefik.http.routers.disposable-camera.tls.certresolver=production" # May want to try staging before production as production has a rate limit
+      - "traefik.http.services.disposable-camera.loadbalancer.server.port=5173"
+    networks:
+      - "traefik-proxy"
+
+networks:
+  traefik-proxy:
+    external: true
