@@ -7,14 +7,14 @@
 </template>
 
 <script setup>
-// No imports needed here
+
 </script>
 
 <style>
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100dvh;
   overflow: hidden;
 }
 </style>
