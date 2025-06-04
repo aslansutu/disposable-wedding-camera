@@ -1,11 +1,9 @@
+<script setup>
+import TheWelcome from '../components/TheWelcome.vue'
+</script>
+
 <template>
   <main>
-    <div style="height: 80%;">
-      <CameraView />
-    </div>
+    <TheWelcome />
   </main>
 </template>
-
-<script setup>
-import CameraView from '@/components/CameraView.vue'
-</script>
