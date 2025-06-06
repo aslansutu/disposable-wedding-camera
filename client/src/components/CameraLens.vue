@@ -119,14 +119,24 @@ const videoStyle = computed(() => ({
   backfaceVisibility: 'hidden',
 }))
 
+const handleVisibilityChange = () => {
+  if (document.hidden) {
+    stopCamera()
+  } else {
+    startCamera(isFrontCamera.value)
+  }
+}
+
 onMounted(() => {
   startCamera()
   window.addEventListener('orientationchange', handleOrientation)
+  document.addEventListener('visibilitychange', handleVisibilityChange)
 })
 
 onUnmounted(() => {
   stopCamera()
   window.removeEventListener('orientationchange', handleOrientation)
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
 })
 </script>
 
