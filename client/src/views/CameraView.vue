@@ -1,19 +1,26 @@
 <template>
-  <CameraLens />
+  <CameraLens ref="cameraLensRef"/>
   <div class="action-buttons">
     <button class="shutter-button">
       <CameraIcon class="icon" />
     </button>
-    <button class="orbit-button">
+    <button class="orbit-button" @click="handleFlipCamera">
       <OrbitVariant class="icon" />
     </button>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import CameraLens from '../components/CameraLens.vue'
 import CameraIcon from 'vue-material-design-icons/Camera.vue'
 import OrbitVariant from 'vue-material-design-icons/OrbitVariant.vue'
+
+const cameraLensRef = ref(null)
+
+const handleFlipCamera = () => {
+  cameraLensRef.value?.flipCamera()
+}
 </script>
 
 <style scoped>
