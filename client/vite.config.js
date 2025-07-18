@@ -16,6 +16,6 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: ['atakans-macbook-air']
+    allowedHosts: true
   }
 })
