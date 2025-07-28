@@ -11,16 +11,16 @@ services:
     environment:
       - NODE_ENV=development
       - VITE_HOST=0.0.0.0
-      - VITE_API_URL=http://localhost:8000
+      - VITE_API_URL=http://127.0.0.1:8000
     restart: unless-stopped
+    env_file:
+      - ./.env
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-proxy"
-      - "traefik.http.routers.disposable-camera.rule=Host(`${DOMAIN}`) && PathPrefix(`/`) || Host(`disposable-camera.${DOMAIN}`)"
-      - "traefik.http.routers.disposable-camera.entrypoints=websecure,web"
-      - "trafeik.http.routers.disposable-camera.tls=true"
-      - "traefik.http.middlewares.disposable-camera-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.disposable-camera.middlewares=disposable-camera-https-redirect"
+      - "traefik.http.routers.disposable-camera.rule=Host(`${DOMAIN}`) && PathPrefix(`/`)"
+      - "traefik.http.routers.disposable-camera.entrypoints=websecure"
+      - "traefik.http.routers.disposable-camera.tls=true"
       - "traefik.http.routers.disposable-camera.tls.certresolver=production" # May want to try staging before production as production has a rate limit
       - "traefik.http.services.disposable-camera.loadbalancer.server.port=5173"
     networks:
@@ -38,6 +38,14 @@ services:
     environment:
       - ENVIRONMENT=development
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-proxy"
+      - "traefik.http.routers.disposable-camera-backend.ruleHost(`api.${DOMAIN}`) && PathPrefix(`/`) "
+      - "traefik.http.routers.disposable-camera-backend.entrypoints=websecure"
+      - "traefik.http.routers.disposable-camera-backend.tls=true"
+      - "traefik.http.routers.disposable-camera-backend.tls.certresolver=production" # May want to try staging before production as production has a rate limit
+      - "traefik.http.services.disposable-camera-backend.loadbalancer.server.port=8000"
     networks:
       - "traefik-proxy"
 

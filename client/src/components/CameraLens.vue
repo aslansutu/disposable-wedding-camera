@@ -85,6 +85,25 @@ const handleVisibilityChange = () => {
   }
 }
 
+const captureFrame = () => {
+  const canvas = document.createElement('canvas')
+  const videoElement = video.value
+  if (!videoElement) return null
+
+  canvas.width = videoElement.videoWidth
+  canvas.height = videoElement.videoHeight
+  const ctx = canvas.getContext('2d')
+  
+  if (isFrontCamera.value) {
+    // Mirror for front camera
+    ctx.translate(canvas.width, 0)
+    ctx.scale(-1, 1)
+  }
+
+  ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height)
+  return canvas.toDataURL('image/png') // base64 image
+}
+
 onMounted(() => {
   startCamera()
   window.addEventListener('orientationchange', handleOrientation)
@@ -97,8 +116,14 @@ onUnmounted(() => {
   document.removeEventListener('visibilitychange', handleVisibilityChange)
 })
 
+const pausePreview = () => video.value?.pause()
+const resumePreview = () => video.value?.play()
+
 defineExpose({
-  flipCamera
+  flipCamera,
+  captureFrame,
+  pausePreview,
+  resumePreview
 })
 </script>
 
