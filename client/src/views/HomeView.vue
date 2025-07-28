@@ -1,9 +1,12 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import PictureWall from '@/components/PictureWall.vue';
+
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <PictureWall/>
 </template>
+
+<style lang="css" scoped>
+
+</style>
