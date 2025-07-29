@@ -7,13 +7,16 @@ import shutil
 from datetime import datetime
 import os
 import json
+from os import environ
 
 app = FastAPI()
+
+client_url = environ.get("CLIENT_URL")
 
 # Enable CORS for your frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace with your frontend domain for security
+    allow_origins=[client_url],  # Use the actual frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

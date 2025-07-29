@@ -24,12 +24,16 @@
 <script setup>
 import { ref } from 'vue'
 import { API_URL } from '../settings.js'
+import { useRouter } from 'vue-router'
+
+const apiurl = (path) => API_URL + path;
 
 const title = ref('')
 const event_name = ref('')
 const description = ref('')
 const image = ref(null)
 const success = ref(false)
+const router = useRouter()
 
 function onFileChange(e) {
   image.value = e.target.files[0]
@@ -41,12 +45,15 @@ async function submitForm() {
   formData.append('event_name', event_name.value)
   formData.append('description', description.value)
   formData.append('image', image.value)
-  const res = await fetch(API_URL + '/info', {
+  const res = await fetch(apiurl('/info'), {
     method: 'POST',
     body: formData
   })
   if (res.ok) {
     success.value = true
+    setTimeout(() => {
+      router.push('/')
+    }, 2000) // Redirect after 2 seconds
   }
 }
 </script>
