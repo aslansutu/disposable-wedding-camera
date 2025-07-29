@@ -1,23 +1,36 @@
-<script setup>
-import PictureWall from '@/components/PictureWall.vue';
-import MainInfo from '@/components/MainInfo.vue';
-import CameraIcon from 'vue-material-design-icons/Camera.vue'
-
-
-</script>
-
 <template>
   <MainInfo/>
   <PictureWall/>
-  
-  <div class="camera-navigator">
-    <button class="camera-btn" @click="$router.push('/camera')">
+
+  <div v-show="remaining_tokens > 0" class="camera-navigator">
+    <button class="camera-btn" @click="router.push('/camera')">
       <CameraIcon class="icon" />
+      {{ remaining_tokens }}
     </button>
   </div>
 </template>
 
-<style lang="css" scoped>
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import PictureWall from '@/components/PictureWall.vue'
+import MainInfo from '@/components/MainInfo.vue'
+import CameraIcon from 'vue-material-design-icons/Camera.vue'
+
+const router = useRouter()
+const remaining_tokens = ref(27)
+
+onMounted(() => {
+  let tokens = localStorage.getItem('remainingTokens')
+  if (tokens === null || tokens === '0') {
+    tokens = 27
+    localStorage.setItem('remainingTokens', tokens)
+  }
+  remaining_tokens.value = parseInt(tokens)
+})
+</script>
+
+<style scoped>
 .camera-navigator {
   position: fixed;
   left: 0;
