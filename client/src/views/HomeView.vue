@@ -76,5 +76,8 @@ onMounted(() => {
   width: 32px;
   height: 32px;
   color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
