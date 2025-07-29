@@ -12,16 +12,24 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import CameraLens from '../components/CameraLens.vue'
 import CameraIcon from 'vue-material-design-icons/Camera.vue'
 import OrbitVariant from 'vue-material-design-icons/OrbitVariant.vue'
 import { API_URL } from '../settings.js'
+import { useRouter } from 'vue-router'
 
 
 const cameraLensRef = ref(null)
+const router = useRouter()
 const apiurl = (path) => API_URL + path;
+var remaining_tokens = localStorage.getItem('remainingTokens')
 
+onMounted(() => {
+  if (remaining_tokens === null || remaining_tokens === '0') {
+    router.push('/')
+  }
+})
 
 const handleFlipCamera = () => {
   cameraLensRef.value?.flipCamera()
@@ -57,6 +65,8 @@ const handleShutter = async () => {
       }),
       delay
     ])
+    remaining_tokens = parseInt(remaining_tokens) - 1
+    localStorage.setItem('remainingTokens', remaining_tokens)
     console.log('Image uploaded and delay complete')
   } catch (error) {
     console.error('Upload failed', error)
