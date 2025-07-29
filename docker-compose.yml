@@ -2,26 +2,17 @@ services:
   client:
     build:
       context: ./client
-      dockerfile: Dockerfile
-    ports:
-      - "5173:5173"
-    volumes:
-      - ./client:/app
-      - /app/node_modules
+      dockerfile: Dockerfile.dev
     environment:
-      - NODE_ENV=development
-      - VITE_HOST=0.0.0.0
       - VITE_API_URL=http://127.0.0.1:8000
     restart: unless-stopped
-    env_file:
-      - ./.env
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-proxy"
       - "traefik.http.routers.disposable-camera.rule=Host(`${DOMAIN}`) && PathPrefix(`/`)"
       - "traefik.http.routers.disposable-camera.entrypoints=websecure"
       - "traefik.http.routers.disposable-camera.tls=true"
-      - "traefik.http.routers.disposable-camera.tls.certresolver=production" # May want to try staging before production as production has a rate limit
+      - "traefik.http.routers.disposable-camera.tls.certresolver=production"
       - "traefik.http.services.disposable-camera.loadbalancer.server.port=5173"
     networks:
       - "traefik-proxy"
