@@ -3,7 +3,6 @@
     <h2>
         {{ title }}
     </h2>
-    <h2>for</h2>
     <h1>
         {{ event_name }}
     </h1>
@@ -23,10 +22,10 @@ export default {
     name: 'MainInfo',
     data() {
         return {
-            title: 'Disposable Camera',
-            event_name: 'Hanife & Atakan\'s Wedding',
-            description: 'This is a disposable camera application. Please take press the camera button to take a photo. All taken pictures will be uploaded to the server and will be available for everyone to see and download. Once you press the shutter button to take a picture, it will automatically be uploaded and cannot be deleted or cancelled.',
-            url: 'https://www.sample-videos.com/img/Sample-png-image-500kb.png'
+            title: 'Title',
+            event_name: 'Event Name',
+            description: 'Description of event',
+            url: 'https://picsum.photos/200/300'
         }
     },
     async mounted() {
