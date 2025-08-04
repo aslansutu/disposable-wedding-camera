@@ -15,7 +15,6 @@
         style="position: relative;"
       >
         <img :src="apiurl(item.url)" style="width: 100%; display: block;" />
-        <span>{{ item.filename }}</span>
         <div
           v-if="activeIndex === index"
           class="overlay"
