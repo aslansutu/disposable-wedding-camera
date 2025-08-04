@@ -19,9 +19,11 @@
     <button type="submit">Submit</button>
     <div v-if="success" class="success-msg">Event info saved!</div>
   </form>
+  <button @click="reset">Reset</button>
 </template>
 
 <script setup>
+// This is a disposable camera application. Please take press the camera button to take a photo. All taken pictures will be uploaded to the server and will be available for everyone to see and download. Once you press the shutter button to take a picture, it will automatically be uploaded and cannot be deleted or cancelled.
 import { ref } from 'vue'
 import { API_URL } from '../settings.js'
 import { useRouter } from 'vue-router'
@@ -34,6 +36,12 @@ const description = ref('')
 const image = ref(null)
 const success = ref(false)
 const router = useRouter()
+
+async function reset() {
+  await fetch(apiurl('/reset'), {
+    method: 'GET'
+  })
+}
 
 function onFileChange(e) {
   image.value = e.target.files[0]

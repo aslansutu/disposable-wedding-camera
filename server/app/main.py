@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 import shutil
 from datetime import datetime
+import requests
 import os
 import json
 from os import environ
@@ -30,6 +31,46 @@ app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 EVENT_INFO_FILE = os.path.join(UPLOAD_DIR, "event_info.json")
 EVENT_IMAGE_NAME = "event_image.png"
+
+@app.get("/demo/{num}")
+async def demo(num: int):
+    if num < 1:
+        return JSONResponse(content={"message": "Number must be greater than 0"}, status_code=400)
+    
+    for i in range(num):
+        import random
+        width = [200, 300, 400, 500, 600]
+        height = [200, 300, 400, 500, 600]
+        try:
+            response = requests.get(f"https://picsum.photos/{random.choice(width)}/{random.choice(height)}", stream=True)
+            if response.status_code == 200:
+                filename = f"image_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}_{i}.jpg"
+                file_path = os.path.join(UPLOAD_DIR, filename)
+                with open(file_path, "wb") as f:
+                    for chunk in response.iter_content(1024):
+                        f.write(chunk)
+            else:
+                return JSONResponse(content={"message": f"Failed to fetch image #{i+1}"}, status_code=500)
+        except Exception as e:
+            return JSONResponse(content={"message": f"Error fetching image #{i+1}: {str(e)}"}, status_code=500)
+        
+
+@app.get("/reset")
+async def reset():
+    # Remove all files in the upload directory
+    for filename in os.listdir(UPLOAD_DIR):
+        file_path = os.path.join(UPLOAD_DIR, filename)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+        except Exception as e:
+            return JSONResponse(content={"message": f"Error deleting file {filename}: {str(e)}"}, status_code=500)
+
+    # Remove the event info file
+    if os.path.exists(EVENT_INFO_FILE):
+        os.remove(EVENT_INFO_FILE)
+
+    return JSONResponse(content={"message": "All files and event info reset successfully"})
 
 @app.post("/upload/")
 async def upload_image(file: UploadFile = File(...)):
