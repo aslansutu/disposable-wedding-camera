@@ -3,6 +3,7 @@ from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 import shutil
 from datetime import datetime
 import requests
@@ -10,9 +11,11 @@ import os
 import json
 from os import environ
 
+client_url = environ.get("CLIENT_URL")
+
 app = FastAPI()
 
-client_url = environ.get("CLIENT_URL")
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
 
 # Enable CORS for your frontend
 app.add_middleware(
@@ -73,7 +76,7 @@ async def reset():
 
     return JSONResponse(content={"message": "All files and event info reset successfully"})
 
-@app.post("/upload/")
+@app.post("/upload")
 async def upload_image(file: UploadFile = File(...)):
     filename = f"{datetime.utcnow().isoformat().replace(':', '-')}.png"
     filepath = os.path.join(UPLOAD_DIR, filename)
