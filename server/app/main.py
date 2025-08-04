@@ -34,6 +34,7 @@ EVENT_IMAGE_NAME = "event_image.png"
 
 @app.get("/demo/{num}")
 async def demo(num: int):
+    print(f"Received request to fetch {num} demo images")
     if num < 1:
         return JSONResponse(content={"message": "Number must be greater than 0"}, status_code=400)
     

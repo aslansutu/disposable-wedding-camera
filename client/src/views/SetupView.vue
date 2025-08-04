@@ -93,6 +93,7 @@ async function resetImages() {
 async function getDemoImages() {
   loading.value = true
   controlMsg.value = ''
+  console.log('Fetching demo images:', demoNum.value)
   try {
     const res = await fetch(apiurl(`/demo/${demoNum.value}`))
     if (res.ok) {
